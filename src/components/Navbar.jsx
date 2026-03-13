@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -29,25 +32,62 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-1">
             <Link 
               to="/" 
-              className="text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/') 
+                  ? 'text-primary-600 bg-primary-50' 
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+              }`}
             >
               Home
             </Link>
             <Link 
+              to="/about" 
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/about') 
+                  ? 'text-primary-600 bg-primary-50' 
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+              }`}
+            >
+              About
+            </Link>
+           
+            <Link 
               to="/services" 
-              className="text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/services') 
+                  ? 'text-primary-600 bg-primary-50' 
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+              }`}
             >
               Services
             </Link>
             <Link 
               to="/providers" 
-              className="text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/providers') 
+                  ? 'text-primary-600 bg-primary-50' 
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+              }`}
             >
               Providers
             </Link>
+             <Link 
+              to="/contact" 
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/contact') 
+                  ? 'text-primary-600 bg-primary-50' 
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+              }`}
+            >
+              Contact
+            </Link>
             <Link 
               to="/booking" 
-              className="text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/booking') 
+                  ? 'text-primary-600 bg-primary-50' 
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+              }`}
             >
               Book Now
             </Link>
@@ -86,37 +126,68 @@ const Navbar = () => {
               <Link 
                 to="/" 
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200"
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive('/') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                }`}
               >
                 Home
               </Link>
               <Link 
+                to="/about" 
+                onClick={() => setIsMenuOpen(false)}
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive('/about') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                }`}
+              >
+                About
+              </Link>
+              <Link 
                 to="/services" 
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200"
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive('/services') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                }`}
               >
                 Services
               </Link>
               <Link 
                 to="/providers" 
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200"
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive('/providers') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                }`}
               >
                 Providers
               </Link>
               <Link 
-                to="/booking" 
+                to="/contact" 
                 onClick={() => setIsMenuOpen(false)}
-                className="block text-gray-700 hover:text-primary-600 hover:bg-primary-50 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200"
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive('/contact') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                }`}
               >
-                Book Now
+                Contact
               </Link>
               <Link 
-                to="/login" 
+                to="/booking" 
                 onClick={() => setIsMenuOpen(false)}
-                className="block bg-primary-600 text-white hover:bg-primary-700 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 text-center"
+                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive('/booking') 
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-primary-50'
+                }`}
               >
-                Login
+                Book Now
               </Link>
             </div>
           </div>

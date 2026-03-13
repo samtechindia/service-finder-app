@@ -15,16 +15,18 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="mb-6">
-               <img 
+              <center>
+                 <img 
                 src="/footer-logo.png" 
                 alt="Service Hub" 
-                className=" object-contain"
+                className="h-24 w-auto object-contain"
                 
               />
-              {/* <p className="text-gray-300 mb-6 leading-relaxed">
+              </center> 
+              <p className="text-gray-300 mb-6 leading-relaxed mt-4">
                 Your trusted marketplace for finding reliable service providers in your area. 
                 We connect you with verified professionals for all your needs.
-              </p> */}
+              </p>
               
               {/* Social Media Links */}
               <div className="flex space-x-4 mt-6">

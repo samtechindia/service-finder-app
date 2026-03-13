@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Card, Badge, Avatar, RatingStars, SkeletonLoader } from '../components/ui';
 import HeroSlider from '../components/HeroSlider';
 import AdvancedSearch from '../components/AdvancedSearch';
@@ -9,6 +9,7 @@ import servicesData from '../mock/services.json';
 import providersData from '../mock/providers.json';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [services, setServices] = useState([]);
   const [providers, setProviders] = useState([]);
@@ -114,7 +115,7 @@ const Home = () => {
           <div className="lg:ml-auto w-full max-w-xl">
 
             <div className="flex flex-wrap gap-4 mb-6">
-              <Button size="lg" className="hover:scale-105 transition-all">
+              <Button size="lg" className="hover:scale-105 transition-all" onClick={() => document.getElementById('services-section')?.scrollIntoView({ behavior: 'smooth' })}>
                 Find Services
               </Button>
 
@@ -122,6 +123,7 @@ const Home = () => {
                 variant="outline"
                 size="lg"
                 className="hover:scale-105 transition-all"
+                onClick={() => navigate('/providers')}
               >
                 Become Provider
               </Button>
@@ -201,7 +203,7 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.slice(0,8).map(service => (
               <div key={service.id} className="hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
                 <ServiceCard service={service} />
@@ -329,11 +331,11 @@ const Home = () => {
 
           <div className="mt-10 flex justify-center gap-6">
 
-            <Button size="lg" className="bg-white text-primary-600 hover:scale-105 transition-all">
+            <Button size="lg" className="bg-white text-primary-600 hover:scale-105 transition-all" onClick={() => navigate('/providers')}>
               Find Providers
             </Button>
 
-            <Button size="lg" variant="outline" className="border-white text-primary-600 hover:scale-105 transition-all">
+            <Button size="lg" variant="outline" className="border-white text-primary-600 hover:scale-105 transition-all" onClick={() => navigate('/providers')}>
               Become Provider
             </Button>
 

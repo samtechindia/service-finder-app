@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Add Font Awesome CSS
-const fontAwesomeLink = document.createElement('link');
-fontAwesomeLink.rel = 'stylesheet';
-fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-document.head.appendChild(fontAwesomeLink);
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faPhone, faLocationDot, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function ContactUs() {
 
@@ -168,19 +164,19 @@ export default function ContactUs() {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
 
           <div className="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition">
-            <i className="fas fa-envelope text-primary-600 text-3xl mb-4"></i>
+            <FontAwesomeIcon icon={faEnvelope} className="text-primary-600 text-3xl mb-4" />
             <h3 className="font-semibold text-lg mb-1">Email</h3>
             <p className="text-gray-600">support@yourdomain.com</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition">
-            <i className="fas fa-phone text-green-600 text-3xl mb-4"></i>
+            <FontAwesomeIcon icon={faPhone} className="text-green-600 text-3xl mb-4" />
             <h3 className="font-semibold text-lg mb-1">Phone</h3>
             <p className="text-gray-600">+91 98765 43210</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition">
-            <i className="fas fa-location-dot text-red-600 text-3xl mb-4"></i>
+            <FontAwesomeIcon icon={faLocationDot} className="text-red-600 text-3xl mb-4" />
             <h3 className="font-semibold text-lg mb-1">Address</h3>
             <p className="text-gray-600">
               Ujjain, Madhya Pradesh<br/>
@@ -219,7 +215,7 @@ export default function ContactUs() {
               <div className="mb-6">
 
                 <label className="block text-gray-600 mb-2 text-left">
-                  Name
+                  Name*
                 </label>
 
                 <input
@@ -241,7 +237,7 @@ export default function ContactUs() {
               <div className="mb-6">
 
                 <label className="block text-gray-600 mb-2 text-left">
-                  Email
+                  Email*
                 </label>
 
                 <input
@@ -263,7 +259,7 @@ export default function ContactUs() {
               <div className="mb-6">
 
                 <label className="block text-gray-600 mb-2 text-left">
-                  Phone
+                  Phone*
                 </label>
 
                 <input
@@ -285,7 +281,7 @@ export default function ContactUs() {
               <div className="mb-6">
 
                 <label className="block text-gray-600 mb-2 text-left">
-                  Message
+                  Message*
                 </label>
 
                 <textarea
@@ -333,7 +329,7 @@ export default function ContactUs() {
 
                 {loading ? (
                   <>
-                    <i className="fas fa-spinner fa-spin mr-2"></i>
+                    <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
                     Sending...
                   </>
                 ) : (

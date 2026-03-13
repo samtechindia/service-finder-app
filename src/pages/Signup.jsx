@@ -246,7 +246,7 @@ const Signup = () => {
             {/* Name Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-800 text-left">
-                Full Name
+                Full Name*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -275,7 +275,7 @@ const Signup = () => {
             {/* Email Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-800 text-left">
-                Email Address
+                Email Address*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -304,7 +304,7 @@ const Signup = () => {
             {/* Phone Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-800 text-left">
-                Phone Number
+              Phone Number*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -333,7 +333,7 @@ const Signup = () => {
             {/* Password Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-800 text-left">
-                Password
+                Password*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -378,7 +378,7 @@ const Signup = () => {
             {/* Confirm Password Field */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-800 text-left">
-                Confirm Password
+                Confirm Password*
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -470,17 +470,17 @@ const Signup = () => {
           </form>
 
           {/* Divider */}
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white/95 backdrop-blur text-gray-500 font-medium">Or continue with</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Social Signup Buttons */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <button
               type="button"
               className="group relative w-full inline-flex justify-center items-center py-3 px-4 border border-gray-200 rounded-2xl bg-white/90 backdrop-blur text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 transform hover:scale-105 hover:shadow-md"
@@ -503,7 +503,7 @@ const Signup = () => {
               </svg>
               GitHub
             </button>
-          </div>
+          </div> */}
           </div>
         </div>
       </div>

@@ -107,7 +107,7 @@ const Login = () => {
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-700 text-left"
               >
-                Email Address
+                Email Address*
               </label>
 
               <input
@@ -122,7 +122,7 @@ const Login = () => {
               />
 
               {errors.email && (
-                <p className="text-red-500 text-sm">
+                <p className="text-red-500 text-sm text-left">
                   {errors.email}
                 </p>
               )}
@@ -136,7 +136,7 @@ const Login = () => {
                 htmlFor="password"
                 className="block text-sm font-semibold text-gray-700 text-left"
               >
-                Password
+                Password*
               </label>
 
               <div className="relative">
@@ -211,7 +211,7 @@ const Login = () => {
           </form>
 
           {/* Divider */}
-          <div className="mt-8">
+          {/* <div className="mt-8">
 
             <div className="flex items-center">
               <div className="flex-grow border-t"></div>
@@ -222,7 +222,7 @@ const Login = () => {
             </div>
 
             {/* Social Login */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            {/* <div className="mt-6 grid grid-cols-2 gap-3">
 
               <button className="border rounded-xl py-3 hover:bg-gray-50">
                 Google
@@ -234,7 +234,7 @@ const Login = () => {
 
             </div>
 
-          </div>
+          </div>  */}
 
         </div>
 

@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarker, faPhone, faEnvelope, faAngleUp, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faTwitter, faGooglePlus, faLinkedin, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
-
-  useEffect(() => {
-    const fontAwesomeLink = document.createElement('link');
-    fontAwesomeLink.rel = 'stylesheet';
-    fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-    document.head.appendChild(fontAwesomeLink);
-  }, []);
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -19,28 +15,33 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="mb-6">
-              <h3 className="text-2xl font-bold mb-4 text-primary-400">Service Platform</h3>
-              <p className="text-gray-300 mb-6 leading-relaxed">
+               <img 
+                src="/footer-logo.png" 
+                alt="Service Hub" 
+                className=" object-contain"
+                
+              />
+              {/* <p className="text-gray-300 mb-6 leading-relaxed">
                 Your trusted marketplace for finding reliable service providers in your area. 
                 We connect you with verified professionals for all your needs.
-              </p>
+              </p> */}
               
               {/* Social Media Links */}
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 mt-6">
                 <a href="#" className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center hover:bg-primary-700 transition-colors">
-                  <i className="fas fa-facebook text-sm"></i>
+                  <FontAwesomeIcon icon={faFacebook} className="text-sm" />
                 </a>
                 <a href="#" className="w-10 h-10 bg-primary-400 rounded-full flex items-center justify-center hover:bg-primary-500 transition-colors">
-                  <i className="fas fa-twitter text-sm"></i>
+                  <FontAwesomeIcon icon={faTwitter} className="text-sm" />
                 </a>
                 <a href="#" className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors">
-                  <i className="fas fa-google-plus text-sm"></i>
+                  <FontAwesomeIcon icon={faGooglePlus} className="text-sm" />
                 </a>
                 <a href="#" className="w-10 h-10 bg-primary-700 rounded-full flex items-center justify-center hover:bg-primary-800 transition-colors">
-                  <i className="fas fa-linkedin text-sm"></i>
+                  <FontAwesomeIcon icon={faLinkedin} className="text-sm" />
                 </a>
                 <a href="#" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
-                  <i className="fas fa-instagram text-sm"></i>
+                  <FontAwesomeIcon icon={faInstagram} className="text-sm" />
                 </a>
               </div>
             </div>
@@ -75,16 +76,16 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4 text-primary-400">Contact Info</h4>
             <div className="mb-6">
               <div className="flex items-center mb-3">
-                <i className="fas fa-map-marker text-primary-400 mr-3 w-5"></i>
-                <span className="text-gray-300">Jaipur, India</span>
+                <FontAwesomeIcon icon={faMapMarker} className="text-primary-400 mr-3 w-5" />
+                <span className="text-gray-300">Indore, Madhya Pradesh, India</span>
               </div>
               <div className="flex items-center mb-3">
-                <i className="fas fa-phone text-primary-400 mr-3 w-5"></i>
-                <span className="text-gray-300">+91 95711 95353</span>
+                <FontAwesomeIcon icon={faPhone} className="text-primary-400 mr-3 w-5" />
+                <span className="text-gray-300">+91 7415587271</span>
               </div>
               <div className="flex items-center">
-                <i className="fas fa-envelope text-primary-400 mr-3 w-5"></i>
-                <span className="text-gray-300">support@serviceplatform.com</span>
+                <FontAwesomeIcon icon={faEnvelope} className="text-primary-400 mr-3 w-5" />
+                <span className="text-gray-300">support@shivomgroup.com</span>
               </div>
             </div>
 
@@ -98,7 +99,7 @@ const Footer = () => {
                   className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:border-primary-400 text-gray-300 placeholder-gray-500"
                 />
                 <button className="px-4 py-2 bg-primary-600 text-white rounded-r-lg hover:bg-primary-700 transition-colors">
-                  <i className="fas fa-send"></i>
+                  <FontAwesomeIcon icon={faPaperPlane} />
                 </button>
               </div>
             </div>
@@ -128,7 +129,7 @@ const Footer = () => {
         className="fixed bottom-6 right-6 w-12 h-12 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-all duration-300 z-50 flex items-center justify-center"
         title="Back to Top"
       >
-        <i className="fas fa-angle-up"></i>
+        <FontAwesomeIcon icon={faAngleUp} />
       </button>
     </footer>
   );

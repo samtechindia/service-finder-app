@@ -15,12 +15,13 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-primary-600">Service Platform</span>
+          
+              <img 
+                src="/logo.png" 
+                alt="Service Hub" 
+                className="h-24 w-auto object-contain"
+                
+              />
             </Link>
           </div>
           

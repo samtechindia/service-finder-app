@@ -6,6 +6,7 @@ const SimpleAssistant = () => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isPulsing, setIsPulsing] = useState(true);
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -14,7 +15,15 @@ const SimpleAssistant = () => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 1000);
-    return () => clearTimeout(timer);
+
+    const pulseTimer = setTimeout(() => {
+      setIsPulsing(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(pulseTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -331,7 +340,7 @@ const SimpleAssistant = () => {
         <div className={`max-w-xs lg:max-w-md ${isUser ? 'order-2' : 'order-1'}`}>
           <div className={`rounded-2xl px-4 py-3 ${
             isUser 
-              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' 
+              ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white' 
               : message.type === 'help' 
                 ? 'bg-gradient-to-r from-green-50 to-blue-50 text-gray-800 border border-green-200'
                 : message.type === 'info'
@@ -347,7 +356,7 @@ const SimpleAssistant = () => {
             {message.action && (
               <button 
                 onClick={() => handleActionClick(message.action)}
-                className="mt-3 w-full bg-blue-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="mt-3 w-full bg-primary-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium"
               >
                 {message.action.label}
               </button>
@@ -370,8 +379,11 @@ const SimpleAssistant = () => {
         }`}
       >
         <button
-          onClick={() => setIsOpen(true)}
-          className="relative group bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 ease-out backdrop-blur-sm bg-opacity-90 border border-white border-opacity-20"
+          onClick={() => {
+            setIsOpen(true);
+            setIsPulsing(false);
+          }}
+          className="relative group bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 ease-out backdrop-blur-sm bg-opacity-90 border border-white border-opacity-20"
         >
           <div className="flex items-center space-x-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -379,6 +391,11 @@ const SimpleAssistant = () => {
             </svg>
             <span className="font-medium text-sm">Ask Me Anything</span>
           </div>
+          
+          {/* Pulse ring effect */}
+          {isPulsing && (
+            <div className="absolute inset-0 rounded-full bg-primary-400 opacity-30 animate-ping"></div>
+          )}
           
           <div className="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <div className="bg-gray-900 text-white text-xs rounded-lg py-2 px-3 whitespace-nowrap">
@@ -397,7 +414,7 @@ const SimpleAssistant = () => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col animate-in fade-in zoom-in duration-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4 rounded-t-2xl">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
@@ -429,6 +446,9 @@ const SimpleAssistant = () => {
             <div className="flex justify-start mb-4">
               <div className="bg-gray-100 rounded-2xl px-4 py-3 border border-gray-200">
                 <div className="flex space-x-1">
+                  {isPulsing && (
+                    <div className="absolute inset-0 rounded-full bg-primary-400 opacity-30 animate-ping"></div>
+                  )}
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -450,13 +470,13 @@ const SimpleAssistant = () => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your question here..."
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               disabled={isTyping}
             />
             <button
               onClick={sendMessage}
               disabled={isTyping || !inputValue.trim()}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-3 rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
+              className="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-4 py-3 rounded-xl hover:from-primary-700 hover:to-primary-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />

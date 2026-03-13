@@ -47,6 +47,7 @@ const AppRoutes = () => {
       <Route path="/verify-otp" element={<MainLayout><VerifyOtp /></MainLayout>} />
       <Route path="/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
       <Route path="/provider/login" element={<MainLayout><Login /></MainLayout>} />
+      <Route path="/privacy-policy" element={<MainLayout><PrivacyPolicy /></MainLayout>} />
       <Route path="/terms" element={<MainLayout><TermsOfServices /></MainLayout>} />
       <Route path="/cookies-policy" element={<MainLayout><CookiesPolicy /></MainLayout>} />
       <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />

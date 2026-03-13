@@ -14,11 +14,12 @@ import Signup from '../pages/Signup';
 import VerifyOtp from '../pages/VerifyOtp';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfServices from '../pages/TermsOfServices';
-import CoockiesPolicy from '../pages/CoockiesPolicy';
+import CookiesPolicy from '../pages/CookiesPolicy';
 import Contact from '../pages/Contact';
 import About from '../pages/About';
 import Review from '../pages/Review';
 import NotFound from '../pages/NotFound';
+import ForgotPassword from '../pages/ForgotPassword';
 
 // Customer Dashboard Pages
 import CustomerDashboard from '../pages/customer/Dashboard';
@@ -44,9 +45,10 @@ const AppRoutes = () => {
       <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
       <Route path="/signup" element={<MainLayout><Signup /></MainLayout>} />
       <Route path="/verify-otp" element={<MainLayout><VerifyOtp /></MainLayout>} />
-      <Route path="/privacy-policy" element={<MainLayout><PrivacyPolicy /></MainLayout>} />
+      <Route path="/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
+      <Route path="/provider/login" element={<MainLayout><Login /></MainLayout>} />
       <Route path="/terms" element={<MainLayout><TermsOfServices /></MainLayout>} />
-      <Route path="/cookies-policy" element={<MainLayout><CoockiesPolicy /></MainLayout>} />
+      <Route path="/cookies-policy" element={<MainLayout><CookiesPolicy /></MainLayout>} />
       <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
       <Route path="/about" element={<MainLayout><About /></MainLayout>} />
       <Route path="/review/:bookingId" element={<MainLayout><Review /></MainLayout>} />
@@ -65,6 +67,7 @@ const AppRoutes = () => {
 
       {/* 404 Page */}
       <Route path="*" element={<NotFound />} />
+
     </Routes>
   );
 };

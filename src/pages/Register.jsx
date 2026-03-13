@@ -102,11 +102,11 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* User Type Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2 text-left">
                 I am a:
               </label>
               <div className="flex space-x-4">
-                <label className="flex items-center">
+                <label className="flex items-center text-left">
                   <input
                     type="radio"
                     name="userType"
@@ -117,7 +117,7 @@ const Register = () => {
                   />
                   <span className="ml-2 text-sm text-gray-700">Customer</span>
                 </label>
-                <label className="flex items-center">
+                <label className="flex items-center text-left">
                   <input
                     type="radio"
                     name="userType"
@@ -134,7 +134,7 @@ const Register = () => {
             {/* Name Fields */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   First Name
                 </label>
                 <input
@@ -151,7 +151,7 @@ const Register = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Last Name
                 </label>
                 <input
@@ -170,7 +170,7 @@ const Register = () => {
 
             {/* Email and Phone */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                 Email Address
               </label>
               <input
@@ -187,7 +187,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                 Phone Number
               </label>
               <input
@@ -205,7 +205,7 @@ const Register = () => {
 
             {/* Password Fields */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                 Password
               </label>
               <input
@@ -222,7 +222,7 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                 Confirm Password
               </label>
               <input
@@ -240,7 +240,7 @@ const Register = () => {
 
             {/* Terms and Conditions */}
             <div>
-              <label className="flex items-start">
+              <label className="flex items-start text-left">
                 <input
                   type="checkbox"
                   name="agreeToTerms"
@@ -250,13 +250,13 @@ const Register = () => {
                 />
                 <span className="ml-2 text-sm text-gray-700">
                   I agree to the{' '}
-                  <a href="#" className="text-blue-600 hover:text-blue-500">
+                  <Link to="/terms" className="text-blue-600 hover:text-blue-500">
                     Terms and Conditions
-                  </a>{' '}
+                  </Link>{' '}
                   and{' '}
-                  <a href="#" className="text-blue-600 hover:text-blue-500">
+                  <Link to="/privacy-policy" className="text-blue-600 hover:text-blue-500">
                     Privacy Policy
-                  </a>
+                  </Link>
                 </span>
               </label>
               {errors.agreeToTerms && <p className="text-red-500 text-sm mt-1">{errors.agreeToTerms}</p>}

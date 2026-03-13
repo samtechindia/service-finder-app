@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
 
@@ -49,10 +50,10 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-primary-400">Quick Links</h4>
             <ul className="space-y-2">
-              <li><a href="/about" className="text-gray-300 hover:text-primary-400 transition-colors">About Us</a></li>
-              <li><a href="/contact" className="text-gray-300 hover:text-primary-400 transition-colors">Contact</a></li>
-              <li><a href="/providers" className="text-gray-300 hover:text-primary-400 transition-colors">Providers</a></li>
-              <li><a href="/services" className="text-gray-300 hover:text-primary-400 transition-colors">Services</a></li>
+              <li><Link to="/about" className="text-gray-300 hover:text-primary-400 transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="text-gray-300 hover:text-primary-400 transition-colors">Contact</Link></li>
+              <li><Link to="/providers" className="text-gray-300 hover:text-primary-400 transition-colors">Providers</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-primary-400 transition-colors">Services</Link></li>
             </ul>
           </div>
 
@@ -60,12 +61,12 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4 text-primary-400">Our Services</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-primary-400 transition-colors">Electrician</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary-400 transition-colors">Plumber</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary-400 transition-colors">AC Repair</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary-400 transition-colors">Carpenter</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary-400 transition-colors">Painter</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-primary-400 transition-colors">Cleaning</a></li>
+              <li><Link to="/services/electrician" className="text-gray-300 hover:text-primary-400 transition-colors">Electrician</Link></li>
+              <li><Link to="/services/plumber" className="text-gray-300 hover:text-primary-400 transition-colors">Plumber</Link></li>
+              <li><Link to="/services/ac-repair" className="text-gray-300 hover:text-primary-400 transition-colors">AC Repair</Link></li>
+              <li><Link to="/services/carpenter" className="text-gray-300 hover:text-primary-400 transition-colors">Carpenter</Link></li>
+              <li><Link to="/services/painter" className="text-gray-300 hover:text-primary-400 transition-colors">Painter</Link></li>
+              <li><Link to="/services/cleaning" className="text-gray-300 hover:text-primary-400 transition-colors">Cleaning</Link></li>
             </ul>
           </div>
 
@@ -113,9 +114,9 @@ const Footer = () => {
               2026 Service Platform. All rights reserved.
             </div>
             <div className="flex space-x-6">
-              <a href="/privacypolicy" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">Privacy Policy</a>
-              <a href="/termsofservices" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">Terms of Service</a>
-              <a href="/coockiespolicy" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">Cookie Policy</a>
+              <Link to="/privacy-policy" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">Terms of Service</Link>
+              <Link to="/cookies-policy" className="text-gray-400 hover:text-primary-400 text-sm transition-colors">Cookie Policy</Link>
             </div>
           </div>
         </div>

@@ -257,25 +257,25 @@ const Booking = () => {
                   <div className="grid md:grid-cols-2 gap-4">
 
                     <div className="text-left">
-                      <label className="block mb-1 font-medium">Full Name</label>
+                      <label className="block mb-1 font-medium text-left">Full Name</label>
                       <Input name="name" value={bookingData.name} onChange={handleInputChange}/>
                       {errors.name && <p className="text-red-500 text-sm mt-1 text-left">{errors.name}</p>}
                     </div>
 
                     <div>
-                      <label className="block mb-1 font-medium">Email</label>
+                      <label className="block mb-1 font-medium text-left">Email</label>
                       <Input type="email" name="email" value={bookingData.email} onChange={handleInputChange}/>
                       {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
 
                     <div>
-                      <label className="block mb-1 font-medium">Phone</label>
+                      <label className="block mb-1 font-medium text-left">Phone</label>
                       <Input name="phone" value={bookingData.phone} onChange={handleInputChange}/>
                       {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                     </div>
 
                     <div>
-                      <label className="block mb-1 font-medium">Service Address</label>
+                      <label className="block mb-1 font-medium text-left">Service Address</label>
                       <Input name="address" value={bookingData.address} onChange={handleInputChange}/>
                       {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                     </div>
@@ -295,7 +295,7 @@ const Booking = () => {
                   <div className="grid md:grid-cols-2 gap-4">
 
                     <div>
-                      <label className="block mb-1 font-medium">Service Type</label>
+                      <label className="block mb-1 font-medium text-left">Service Type</label>
                       <select
                         name="serviceType"
                         value={bookingData.serviceType}
@@ -311,7 +311,7 @@ const Booking = () => {
                     </div>
 
                     <div>
-                      <label className="block mb-1 font-medium">Urgency</label>
+                      <label className="block mb-1 font-medium text-left">Urgency</label>
                       <select
                         name="urgency"
                         value={bookingData.urgency}
@@ -339,7 +339,7 @@ const Booking = () => {
                   <div className="grid md:grid-cols-2 gap-4">
 
                     <div>
-                      <label className="block mb-1 font-medium">Date</label>
+                      <label className="block mb-1 font-medium text-left">Date</label>
                       <Input
                         type="date"
                         name="date"
@@ -351,7 +351,7 @@ const Booking = () => {
                     </div>
 
                     <div>
-                      <label className="block mb-1 font-medium">Time</label>
+                      <label className="block mb-1 font-medium text-left">Time</label>
                       <select
                         name="time"
                         value={bookingData.time}
@@ -373,7 +373,7 @@ const Booking = () => {
                 {/* Description */}
 
                 <div>
-                  <label className="block mb-1 font-medium">Description</label>
+                  <label className="block mb-1 font-medium text-left">Description</label>
                   <textarea
                     name="description"
                     rows="4"

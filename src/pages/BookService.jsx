@@ -1,33 +1,29 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+import { motion } from "framer-motion"
 
-import Card from '../components/ui/Card'
-import Button from '../components/ui/Button'
-import Input from '../components/ui/Input'
-import Badge from '../components/ui/Badge'
-import Alert from '../components/ui/Alert'
+import Card from "../components/ui/Card"
+import Button from "../components/ui/Button"
+import Input from "../components/ui/Input"
+import Badge from "../components/ui/Badge"
 
 const bookServiceSchema = z.object({
-  service: z.string().min(1, 'Please select a service'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
-  address: z.string().min(5, 'Address is required'),
-  city: z.string().min(2, 'City is required'),
-  date: z.string().min(1, 'Date is required'),
-  time: z.string().min(1, 'Time is required'),
-  urgency: z.enum(['low', 'medium', 'high']),
-  budget: z.string().optional(),
-  additionalNotes: z.string().optional()
+  service: z.string().min(1, "Please select a service"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  address: z.string().min(5, "Address is required"),
+  city: z.string().min(2, "City is required"),
+  date: z.string().min(1, "Date is required"),
+  time: z.string().min(1, "Time is required"),
 })
 
 const BookService = () => {
 
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const providerId = searchParams.get('provider')
+  const providerId = searchParams.get("provider")
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [availableProviders, setAvailableProviders] = useState([])
@@ -37,30 +33,35 @@ const BookService = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
-    setValue
+    setValue,
+    formState: { errors }
   } = useForm({
     resolver: zodResolver(bookServiceSchema)
   })
 
-  const watchedService = watch('service')
+  const watchedService = watch("service")
 
   const services = [
-    { id: 'plumbing', name: 'Plumbing', icon: '🔧' },
-    { id: 'electrical', name: 'Electrical', icon: '⚡' },
-    { id: 'cleaning', name: 'Cleaning', icon: '🧹' },
-    { id: 'gardening', name: 'Gardening', icon: '🌱' },
-    { id: 'painting', name: 'Painting', icon: '🎨' },
-    { id: 'carpentry', name: 'Carpentry', icon: '🔨' },
-    { id: 'hvac', name: 'HVAC', icon: '❄️' },
-    { id: 'moving', name: 'Moving', icon: '🚚' }
+    { id: "plumbing", name: "Plumbing", icon: "🔧" },
+    { id: "electrical", name: "Electrical", icon: "⚡" },
+    { id: "cleaning", name: "Cleaning", icon: "🧹" },
+    { id: "gardening", name: "Gardening", icon: "🌱" },
+    { id: "painting", name: "Painting", icon: "🎨" },
+    { id: "carpentry", name: "Carpentry", icon: "🔨" },
+    { id: "hvac", name: "HVAC", icon: "❄️" },
+    { id: "moving", name: "Moving", icon: "🚚" }
   ]
 
   const mockProviders = [
-    { id: 1, name: 'John Smith', rating: 4.8, reviews: 124, price: '$45-65/hr', experience: '8 years', verified: true },
-    { id: 2, name: 'Sarah Johnson', rating: 4.9, reviews: 89, price: '$50-70/hr', experience: '6 years', verified: true },
-    { id: 3, name: 'Mike Wilson', rating: 4.6, reviews: 67, price: '$40-55/hr', experience: '5 years', verified: false }
+    { id: 1, name: "John Smith", rating: 4.8, reviews: 124, price: "$45-65/hr", verified: true },
+    { id: 2, name: "Sarah Johnson", rating: 4.9, reviews: 89, price: "$50-70/hr", verified: true },
+    { id: 3, name: "Mike Wilson", rating: 4.6, reviews: 67, price: "$40-55/hr", verified: false }
+  ]
+
+  const timeSlots = [
+    "9:00 AM","10:00 AM","11:00 AM","12:00 PM",
+    "1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"
   ]
 
   useEffect(() => {
@@ -76,14 +77,10 @@ const BookService = () => {
       }, 500)
 
     } else {
-
       setAvailableProviders([])
-      setIsLoadingProviders(false)
-
     }
 
   }, [watchedService])
-
 
   useEffect(() => {
 
@@ -93,40 +90,23 @@ const BookService = () => {
 
       if (provider) {
         setSelectedProvider(provider)
-        setValue('service', 'plumbing')
+        setValue("service", "plumbing")
       }
 
     }
 
   }, [providerId, setValue])
 
-
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
 
     setIsSubmitting(true)
 
     setTimeout(() => {
-
       setIsSubmitting(false)
-      navigate('/customer/requests?booking=success')
-
+      navigate("/customer/requests?booking=success")
     }, 2000)
 
   }
-
-
-  const timeSlots = [
-    '9:00 AM','10:00 AM','11:00 AM','12:00 PM',
-    '1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'
-  ]
-
-
-  const urgencyLevels = [
-    { value: 'low', title: 'Low', description: 'Within a week' },
-    { value: 'medium', title: 'Medium', description: 'Within 2-3 days' },
-    { value: 'high', title: 'High', description: 'Urgent today' }
-  ]
-
 
   return (
 
@@ -137,15 +117,15 @@ const BookService = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Book a Service</h1>
           <p className="text-gray-600 mt-2">
-            Find and book the best service providers for your needs
+            Find and book the best service providers
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-8">
 
-            {/* MAIN FORM */}
+            {/* LEFT SECTION */}
 
             <div className="lg:col-span-2 space-y-6">
 
@@ -167,42 +147,30 @@ const BookService = () => {
 
                       return (
 
-                        <motion.div
+                        <motion.label
                           key={service.id}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
+                          className={`flex flex-col items-center p-4 border-2 rounded-xl cursor-pointer
+                          ${isSelected
+                            ? "border-primary-500 bg-primary-50"
+                            : "border-gray-200 bg-white"}
+                          `}
                         >
 
-                          <label
-                            className={`flex flex-col items-center justify-center p-5 border-2 rounded-xl cursor-pointer transition-all
-                            ${isSelected
-                              ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 shadow'
-                              : 'border-gray-200 hover:border-gray-300 bg-white'}
-                            `}
-                          >
+                          <input
+                            type="radio"
+                            value={service.id}
+                            {...register("service")}
+                            className="hidden"
+                          />
 
-                            <input
-                              type="radio"
-                              value={service.id}
-                              {...register('service')}
-                              className="hidden"
-                              onChange={() => {
-                                setValue('service', service.id)
-                                setSelectedProvider(null)
-                              }}
-                            />
+                          <span className="text-3xl">{service.icon}</span>
+                          <span className="text-sm font-medium mt-1">
+                            {service.name}
+                          </span>
 
-                            <span className="text-3xl mb-2">
-                              {service.icon}
-                            </span>
-
-                            <span className="text-sm font-medium">
-                              {service.name}
-                            </span>
-
-                          </label>
-
-                        </motion.div>
+                        </motion.label>
 
                       )
 
@@ -220,22 +188,21 @@ const BookService = () => {
 
               </Card>
 
-
               {/* DESCRIPTION */}
 
               <Card>
 
-                <div className="p-6 space-y-6">
+                <div className="p-6 space-y-4">
 
                   <h2 className="text-lg font-semibold">
                     Service Details
                   </h2>
 
                   <textarea
-                    {...register('description')}
+                    {...register("description")}
                     rows={4}
                     className="w-full border rounded-lg p-3"
-                    placeholder="Describe your problem..."
+                    placeholder="Describe the problem..."
                   />
 
                   {errors.description && (
@@ -247,7 +214,6 @@ const BookService = () => {
                 </div>
 
               </Card>
-
 
               {/* LOCATION */}
 
@@ -261,15 +227,35 @@ const BookService = () => {
 
                   <div className="grid md:grid-cols-2 gap-6">
 
-                    <Input
-                      {...register('address')}
-                      placeholder="Address"
-                    />
+                    <div>
 
-                    <Input
-                      {...register('city')}
-                      placeholder="City"
-                    />
+                      <Input
+                        {...register("address")}
+                        placeholder="Address"
+                      />
+
+                      {errors.address && (
+                        <p className="text-red-500 text-sm">
+                          {errors.address.message}
+                        </p>
+                      )}
+
+                    </div>
+
+                    <div>
+
+                      <Input
+                        {...register("city")}
+                        placeholder="City"
+                      />
+
+                      {errors.city && (
+                        <p className="text-red-500 text-sm">
+                          {errors.city.message}
+                        </p>
+                      )}
+
+                    </div>
 
                   </div>
 
@@ -277,8 +263,8 @@ const BookService = () => {
 
                     <Input
                       type="date"
-                      {...register('date')}
-                      min={new Date().toISOString().split('T')[0]}
+                      {...register("date")}
+                      min={new Date().toISOString().split("T")[0]}
                     />
 
                     <div className="grid grid-cols-3 gap-2">
@@ -290,14 +276,14 @@ const BookService = () => {
                           <input
                             type="radio"
                             value={slot}
-                            {...register('time')}
+                            {...register("time")}
                             className="hidden"
                           />
 
                           <div className={`p-2 text-center border rounded-lg
-                          ${watch('time') === slot
-                            ? 'bg-primary-600 text-white'
-                            : 'bg-white'}
+                          ${watch("time") === slot
+                            ? "bg-primary-600 text-white"
+                            : "bg-white"}
                           `}>
                             {slot}
                           </div>
@@ -316,8 +302,7 @@ const BookService = () => {
 
             </div>
 
-
-            {/* SIDEBAR */}
+            {/* RIGHT SIDEBAR */}
 
             <div className="space-y-6">
 
@@ -327,15 +312,13 @@ const BookService = () => {
 
                   <div className="p-6">
 
-                    <h2 className="text-lg font-semibold mb-4">
+                    <h2 className="font-semibold mb-4">
                       Available Providers
                     </h2>
 
                     {isLoadingProviders ? (
 
-                      <p className="text-center py-6">
-                        Loading providers...
-                      </p>
+                      <p>Loading providers...</p>
 
                     ) : (
 
@@ -350,38 +333,29 @@ const BookService = () => {
 
                             <input
                               type="radio"
-                              name="provider"
                               className="hidden"
                               checked={selectedProvider?.id === provider.id}
                               onChange={() => setSelectedProvider(provider)}
                             />
 
-                            <div className={`p-4 border-2 rounded-xl transition
+                            <div className={`p-4 border rounded-xl
                             ${selectedProvider?.id === provider.id
-                              ? 'border-primary-500 bg-primary-50'
-                              : 'border-gray-200'}
+                              ? "border-primary-500 bg-primary-50"
+                              : "border-gray-200"}
                             `}>
 
                               <div className="flex justify-between">
 
-                                <h3 className="font-medium">
-                                  {provider.name}
-                                </h3>
+                                <span>{provider.name}</span>
 
                                 {provider.verified && (
-                                  <Badge variant="success">
-                                    Verified
-                                  </Badge>
+                                  <Badge>Verified</Badge>
                                 )}
 
                               </div>
 
                               <p className="text-sm text-gray-600">
-                                ⭐ {provider.rating} ({provider.reviews})
-                              </p>
-
-                              <p className="text-sm text-gray-600">
-                                {provider.price}
+                                ⭐ {provider.rating}
                               </p>
 
                             </div>
@@ -400,40 +374,35 @@ const BookService = () => {
 
               )}
 
-
               {/* SUMMARY */}
 
               <Card>
 
                 <div className="p-6">
 
-                  <h2 className="text-lg font-semibold mb-4">
+                  <h2 className="font-semibold mb-4">
                     Booking Summary
                   </h2>
 
-                  <div className="space-y-3">
+                  <div className="flex justify-between mb-2">
+                    <span>Service</span>
+                    <span>
+                      {services.find(s => s.id === watchedService)?.name || "-"}
+                    </span>
+                  </div>
 
-                    <div className="flex justify-between">
-                      <span>Service</span>
-                      <span>
-                        {services.find(s=>s.id===watchedService)?.name || '-'}
-                      </span>
+                  {selectedProvider && (
+
+                    <div className="flex justify-between mb-4">
+                      <span>Provider</span>
+                      <span>{selectedProvider.name}</span>
                     </div>
 
-                    {selectedProvider && (
-
-                      <div className="flex justify-between">
-                        <span>Provider</span>
-                        <span>{selectedProvider.name}</span>
-                      </div>
-
-                    )}
-
-                  </div>
+                  )}
 
                   <Button
                     type="submit"
-                    className="w-full mt-6"
+                    className="w-full"
                     disabled={!watchedService || !selectedProvider || isSubmitting}
                     loading={isSubmitting}
                   >
@@ -458,4 +427,4 @@ const BookService = () => {
 
 }
 
-export default BookService
+export default BookService;

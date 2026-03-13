@@ -266,7 +266,7 @@ const Review = () => {
                       <div key={category.key}>
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <label className="font-medium text-gray-900">{category.label}</label>
+                            <label className="font-medium text-gray-900 text-left">{category.label}</label>
                             <p className="text-sm text-gray-600">{category.description}</p>
                           </div>
                           <div className="flex items-center">

@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SimpleAssistant from '../components/assistant/SimpleAssistant';
 
 const MainLayout = ({ children }) => {
   return (
@@ -9,6 +10,7 @@ const MainLayout = ({ children }) => {
         {children}
       </main>
       <Footer />
+      <SimpleAssistant />
     </div>
   );
 };

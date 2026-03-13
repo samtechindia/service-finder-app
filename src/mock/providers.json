@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "name": "Ramesh Sharma",
+    "service": "Electrician",
+    "rating": 4.5,
+    "location": "Ujjain",
+    "phone": "+91 98765 43210",
+    "email": "ramesh.sharma@example.com",
+    "experience": "8 years",
+    "description": "Professional electrician with expertise in residential and commercial electrical work. Specialized in wiring, panel upgrades, and troubleshooting.",
+    "availability": "today"
+  },
+  {
+    "id": 2,
+    "name": "Amit Patel",
+    "service": "Plumber",
+    "rating": 4.2,
+    "location": "Indore",
+    "phone": "+91 98765 43211",
+    "email": "amit.patel@example.com",
+    "experience": "6 years",
+    "description": "Experienced plumber offering reliable pipe repair, installation, and maintenance services for residential properties.",
+    "availability": "emergency"
+  },
+  {
+    "id": 3,
+    "name": "Suresh Kumar",
+    "service": "AC Repair",
+    "rating": 4.8,
+    "location": "Bhopal",
+    "phone": "+91 98765 43212",
+    "email": "suresh.kumar@example.com",
+    "experience": "10 years",
+    "description": "AC specialist with comprehensive knowledge of all major brands. Expert in installation, repair, and annual maintenance.",
+    "availability": "week"
+  },
+  {
+    "id": 4,
+    "name": "Vikram Singh",
+    "service": "Carpenter",
+    "rating": 4.6,
+    "location": "Ujjain",
+    "phone": "+91 98765 43213",
+    "email": "vikram.singh@example.com",
+    "experience": "12 years",
+    "description": "Master carpenter skilled in custom furniture making, woodwork repairs, and home renovation projects.",
+    "availability": "weekend"
+  },
+  {
+    "id": 5,
+    "name": "Rahul Verma",
+    "service": "Painter",
+    "rating": 4.3,
+    "location": "Indore",
+    "phone": "+91 98765 43214",
+    "email": "rahul.verma@example.com",
+    "experience": "5 years",
+    "description": "Professional painter offering interior and exterior painting services with attention to detail and quality finishes.",
+    "availability": "week"
+  },
+  {
+    "id": 6,
+    "name": "Anita Desai",
+    "service": "Cleaning",
+    "rating": 4.7,
+    "location": "Bhopal",
+    "phone": "+91 98765 43215",
+    "email": "anita.desai@example.com",
+    "experience": "4 years",
+    "description": "Reliable cleaning service provider for homes and offices. Specialized in deep cleaning and regular maintenance.",
+    "availability": "today"
+  }
+]

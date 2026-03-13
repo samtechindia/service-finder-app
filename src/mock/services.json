@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Electrician",
+    "icon": "⚡",
+    "description": "Electrical repair services",
+    "category": "electrician",
+    "price": 75,
+    "rating": 4.5,
+    "availability": "today"
+  },
+  {
+    "id": 2,
+    "name": "Plumber",
+    "icon": "🔧",
+    "description": "Pipe and water repair services",
+    "category": "plumber",
+    "price": 60,
+    "rating": 4.2,
+    "availability": "emergency"
+  },
+  {
+    "id": 3,
+    "name": "AC Repair",
+    "icon": "❄️",
+    "description": "Air conditioner repair services",
+    "category": "hvac",
+    "price": 120,
+    "rating": 4.8,
+    "availability": "week"
+  },
+  {
+    "id": 4,
+    "name": "Carpenter",
+    "icon": "🔨",
+    "description": "Woodwork and furniture repair services",
+    "category": "carpentry",
+    "price": 85,
+    "rating": 4.6,
+    "availability": "weekend"
+  },
+  {
+    "id": 5,
+    "name": "Painter",
+    "icon": "🎨",
+    "description": "Wall painting and decoration services",
+    "category": "painting",
+    "price": 150,
+    "rating": 4.3,
+    "availability": "week"
+  },
+  {
+    "id": 6,
+    "name": "Cleaning",
+    "icon": "🧹",
+    "description": "Home and office cleaning services",
+    "category": "cleaning",
+    "price": 45,
+    "rating": 4.7,
+    "availability": "today"
+  }
+]

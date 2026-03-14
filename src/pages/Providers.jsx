@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Button, Card, Badge, Input, SkeletonLoader } from '../components/ui';
+import { Button, Card, Badge, Input, SkeletonLoader, EmptyState } from '../components/ui';
 import ProviderCard from '../components/ProviderCard';
-import providersData from '../mock/providers.json';
+import { providersAPI, handleApiError } from '../services/api';
 
 const Providers = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [providers, setProviders] = useState([]);
   const [filteredProviders, setFilteredProviders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [filters, setFilters] = useState({
     category: searchParams.get('category') || '',
@@ -20,13 +21,30 @@ const Providers = () => {
   const [viewMode, setViewMode] = useState('grid');
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setProviders(providersData);
-      setFilteredProviders(providersData);
-      setLoading(false);
-    }, 500);
-  }, []);
+    const fetchProviders = async () => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams();
+        
+        // Add search and filters to API params
+        if (searchTerm) params.set('search', searchTerm);
+        if (filters.category) params.set('category', filters.category);
+        if (filters.location) params.set('location', filters.location);
+        if (filters.rating) params.set('minRating', filters.rating);
+        
+        const response = await providersAPI.getProviders(Object.fromEntries(params));
+        setProviders(response.providers || []);
+        setFilteredProviders(response.providers || []);
+      } catch (err) {
+        console.error('Error fetching providers:', err);
+        setError(handleApiError(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProviders();
+  }, [searchTerm, filters.category, filters.location, filters.rating]);
 
   useEffect(() => {
     let filtered = providers;
@@ -34,36 +52,50 @@ const Providers = () => {
     // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(provider =>
-        provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        provider.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        provider.services?.some(service => 
+          service.service?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          service.service?.category?.toLowerCase().includes(searchTerm.toLowerCase())
+        ) ||
+        provider.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        provider.location?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Apply other filters
+    // Apply category filter
     if (filters.category) {
       filtered = filtered.filter(provider =>
-        provider.category === filters.category
+        provider.services?.some(service =>
+          service.service?.category?.toLowerCase().includes(filters.category.toLowerCase())
+        )
       );
     }
 
+    // Apply rating filter
     if (filters.rating) {
       filtered = filtered.filter(provider =>
-        provider.rating >= parseFloat(filters.rating)
+        (provider.rating || 0) >= parseFloat(filters.rating)
       );
     }
 
+    // Apply price range filter
     if (filters.priceRange) {
       const [min, max] = filters.priceRange.split('-').map(Number);
       filtered = filtered.filter(provider => {
-        const rate = provider.hourlyRate || 0;
-        return rate >= min && rate <= max;
+        // Get the minimum price from provider's services
+        const prices = provider.services?.map(service => service.price || 0) || [];
+        const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+        const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+        
+        // Check if any service price falls within the range
+        return prices.some(price => price >= min && price <= max);
       });
     }
 
+    // Apply location filter
     if (filters.location) {
       filtered = filtered.filter(provider =>
-        provider.location.toLowerCase().includes(filters.location.toLowerCase())
+        provider.location?.toLowerCase().includes(filters.location.toLowerCase())
       );
     }
 
@@ -71,13 +103,23 @@ const Providers = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'rating':
-          return b.rating - a.rating;
+          return (b.rating || 0) - (a.rating || 0);
         case 'experience':
-          return b.experience.localeCompare(a.experience);
+          // Extract numeric years from experience string (e.g., "8 years" -> 8)
+          const aExp = parseInt(a.experience?.match(/\d+/)?.[0] || '0');
+          const bExp = parseInt(b.experience?.match(/\d+/)?.[0] || '0');
+          return bExp - aExp;
         case 'name':
-          return a.name.localeCompare(b.name);
+          const aName = a.user?.name || '';
+          const bName = b.user?.name || '';
+          return aName.localeCompare(bName);
         case 'price':
-          return (a.hourlyRate || 0) - (b.hourlyRate || 0);
+          // Sort by minimum service price
+          const aPrices = a.services?.map(s => s.price || 0) || [0];
+          const bPrices = b.services?.map(s => s.price || 0) || [0];
+          const aMinPrice = aPrices.length > 0 ? Math.min(...aPrices) : 0;
+          const bMinPrice = bPrices.length > 0 ? Math.min(...bPrices) : 0;
+          return aMinPrice - bMinPrice;
         default:
           return 0;
       }

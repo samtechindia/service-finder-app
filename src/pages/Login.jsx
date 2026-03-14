@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -59,10 +62,33 @@ const Login = () => {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      const result = await login({
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (result.success) {
+        toast.success('Login successful! Welcome back.');
+        
+        // Redirect based on user role
+        const userRole = result.user?.role;
+        if (userRole === 'CUSTOMER') {
+          navigate('/customer/dashboard');
+        } else if (userRole === 'PROVIDER') {
+          navigate('/provider/dashboard');
+        } else {
+          // Fallback to home if role is not recognized
+          navigate('/');
+        }
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      navigate("/?login=success");
-    }, 1500);
+    }
   };
 
   return (

@@ -312,7 +312,7 @@ const ServiceProviders = () => {
                             <span className="ml-1 text-sm font-medium">{provider.rating}</span>
                           </div>
                           <span className="text-sm text-gray-600">
-                            ({provider.reviews} reviews)
+                            ({provider.reviewCount || 0} reviews)
                           </span>
                         </div>
 

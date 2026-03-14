@@ -1,0 +1,33 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:pull": "cd .. && npx prisma db pull --schema backend/prisma/schema.prisma",
+    "db:push": "cd .. && npx prisma db push --schema backend/prisma/schema.prisma",
+    "db:migrate": "cd .. && npx prisma migrate dev --name init --schema backend/prisma/schema.prisma",
+    "db:generate": "cd .. && npx prisma generate --schema backend/prisma/schema.prisma",
+    "db:studio": "cd .. && npx prisma studio --schema backend/prisma/schema.prisma",
+    "db:seed": "cd .. && node backend/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Enterprise service marketplace backend API",
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^5.20.0",
+    "zod": "^3.23.8"
+  }
+}

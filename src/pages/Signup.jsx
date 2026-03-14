@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 
 const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -11,13 +13,28 @@ const signupSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
   userType: z.enum(['customer', 'provider']),
-  agreeToTerms: z.boolean().refine(val => val === true, 'You must agree to the terms and conditions')
+  agreeToTerms: z.boolean().refine(val => val === true, 'You must agree to the terms and conditions'),
+  // Provider-specific fields
+  service: z.string().optional(),
+  location: z.string().optional(),
+  experience: z.string().optional(),
+  description: z.string().optional(),
+  availability: z.string().optional()
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"]
+}).refine(data => {
+  if (data.userType === 'provider') {
+    return data.service && data.location && data.experience && data.description;
+  }
+  return true;
+}, {
+  message: "All provider fields are required",
+  path: ["service"]
 });
 
 const Signup = () => {
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +57,12 @@ const Signup = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    service: '',
+    location: '',
+    experience: '',
+    description: '',
+    availability: 'today'
   });
 
   const {
@@ -82,7 +104,12 @@ const Signup = () => {
         phone: currentData.phone || '',
         password: currentData.password || '',
         confirmPassword: currentData.confirmPassword || '',
-        agreeToTerms: currentData.agreeToTerms || false
+        agreeToTerms: currentData.agreeToTerms || false,
+        service: currentData.service || '',
+        location: currentData.location || '',
+        experience: currentData.experience || '',
+        description: currentData.description || '',
+        availability: currentData.availability || 'today'
       }));
     }
   }, [userType, getValues]);
@@ -110,7 +137,12 @@ const Signup = () => {
         phone: currentData.phone || '',
         password: currentData.password || '',
         confirmPassword: currentData.confirmPassword || '',
-        agreeToTerms: currentData.agreeToTerms || false
+        agreeToTerms: currentData.agreeToTerms || false,
+        service: currentData.service || '',
+        location: currentData.location || '',
+        experience: currentData.experience || '',
+        description: currentData.description || '',
+        availability: currentData.availability || 'today'
       }));
     }
     
@@ -120,7 +152,7 @@ const Signup = () => {
     
     setTimeout(() => {
       const dataToRestore = section === 'customer' ? customerFormData : providerFormData;
-      reset({
+      const resetData = {
         userType: section,
         name: dataToRestore.name,
         email: dataToRestore.email,
@@ -128,18 +160,65 @@ const Signup = () => {
         password: dataToRestore.password,
         confirmPassword: dataToRestore.confirmPassword,
         agreeToTerms: dataToRestore.agreeToTerms
-      });
+      };
+      
+      // Add provider fields if switching to provider
+      if (section === 'provider') {
+        resetData.service = dataToRestore.service;
+        resetData.location = dataToRestore.location;
+        resetData.experience = dataToRestore.experience;
+        resetData.description = dataToRestore.description;
+        resetData.availability = dataToRestore.availability;
+      }
+      
+      reset(resetData);
     }, 0);
   };
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const userData = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        phone: data.phone,
+        role: data.userType === 'customer' ? 'CUSTOMER' : 'PROVIDER'
+      };
+
+      // Add provider-specific fields if registering as provider
+      if (data.userType === 'provider') {
+        userData.service = data.service;
+        userData.location = data.location;
+        userData.experience = data.experience;
+        userData.description = data.description;
+        userData.availability = data.availability || 'flexible';
+      }
+
+      const result = await signup(userData);
+
+      if (result.success) {
+        toast.success('Account created successfully! Welcome to our platform.');
+        
+        // Redirect based on user role
+        const userRole = result.user?.role;
+        if (userRole === 'CUSTOMER') {
+          navigate('/customer/dashboard');
+        } else if (userRole === 'PROVIDER') {
+          navigate('/provider/dashboard');
+        } else {
+          // Fallback to home if role is not recognized
+          navigate('/');
+        }
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      navigate('/verify-otp?email=' + encodeURIComponent(data.email));
-    }, 1500);
+    }
   };
 
   return (
@@ -419,6 +498,171 @@ const Signup = () => {
                 </p>
               )}
             </div>
+
+            {/* Provider-specific fields */}
+            {expandedSection === 'provider' && (
+              <div className="space-y-6 border-t border-gray-200 pt-6">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Provider Information</h3>
+                  <p className="text-sm text-gray-600">Tell us about your services</p>
+                </div>
+
+                {/* Service Field */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-800 text-left">
+                    Primary Service*
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <select
+                      {...register('service')}
+                      className={`h-12 w-full pl-12 pr-4 text-base rounded-xl border border-gray-200 bg-white/90 backdrop-blur placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md ${errors.service ? 'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50' : ''}`}
+                    >
+                      <option value="">Select your primary service</option>
+                      <option value="Electrician">Electrician</option>
+                      <option value="Plumber">Plumber</option>
+                      <option value="AC Repair">AC Repair</option>
+                      <option value="Carpenter">Carpenter</option>
+                      <option value="Painter">Painter</option>
+                      <option value="Cleaning">Cleaning</option>
+                      <option value="Mechanic">Mechanic</option>
+                      <option value="Landscaping">Landscaping</option>
+                      <option value="Pest Control">Pest Control</option>
+                      <option value="Appliance Repair">Appliance Repair</option>
+                    </select>
+                  </div>
+                  {errors.service && (
+                    <p className="text-red-500 text-sm flex items-center gap-2 animate-fade-in">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {errors.service.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Location Field */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-800 text-left">
+                    Service Location*
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      {...register('location')}
+                      className={`h-12 w-full pl-12 pr-4 text-base rounded-xl border border-gray-200 bg-white/90 backdrop-blur placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md ${errors.location ? 'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50' : ''}`}
+                      placeholder="City or area where you provide services"
+                    />
+                  </div>
+                  {errors.location && (
+                    <p className="text-red-500 text-sm flex items-center gap-2 animate-fade-in">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {errors.location.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Experience Field */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-800 text-left">
+                    Experience*
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      {...register('experience')}
+                      className={`h-12 w-full pl-12 pr-4 text-base rounded-xl border border-gray-200 bg-white/90 backdrop-blur placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md ${errors.experience ? 'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50' : ''}`}
+                      placeholder="e.g., 5 years, 3+ years"
+                    />
+                  </div>
+                  {errors.experience && (
+                    <p className="text-red-500 text-sm flex items-center gap-2 animate-fade-in">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {errors.experience.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Description Field */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-800 text-left">
+                    Professional Description*
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 pt-3 pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <textarea
+                      {...register('description')}
+                      rows={4}
+                      className={`w-full pl-12 pr-4 pt-3 text-base rounded-xl border border-gray-200 bg-white/90 backdrop-blur placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md resize-none ${errors.description ? 'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50' : ''}`}
+                      placeholder="Describe your services, expertise, and what makes you stand out..."
+                    />
+                  </div>
+                  {errors.description && (
+                    <p className="text-red-500 text-sm flex items-center gap-2 animate-fade-in">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Availability Field */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-800 text-left">
+                    Availability
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <select
+                      {...register('availability')}
+                      className={`h-12 w-full pl-12 pr-4 text-base rounded-xl border border-gray-200 bg-white/90 backdrop-blur placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300 shadow-sm hover:shadow-md ${errors.availability ? 'border-red-500 focus:ring-red-500 focus:border-red-500 bg-red-50' : ''}`}
+                    >
+                      <option value="today">Available Today</option>
+                      <option value="week">Available This Week</option>
+                      <option value="weekend">Available on Weekends</option>
+                      <option value="emergency">Emergency Services</option>
+                      <option value="flexible">Flexible Schedule</option>
+                    </select>
+                  </div>
+                  {errors.availability && (
+                    <p className="text-red-500 text-sm flex items-center gap-2 animate-fade-in">
+                      <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      {errors.availability.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Terms Agreement */}
             <div className="space-y-2">

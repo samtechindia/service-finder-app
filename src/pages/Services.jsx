@@ -1,15 +1,31 @@
 import { useState, useEffect } from 'react';
 import ServiceCard from '../components/ServiceCard';
 import SearchBar from '../components/SearchBar';
-import servicesData from '../mock/services.json';
+import { servicesAPI, handleApiError } from '../services/api';
+import { Loader, EmptyState } from '../components/ui';
 
 const Services = () => {
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setServices(servicesData);
-    setFilteredServices(servicesData);
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const response = await servicesAPI.getServices();
+        setServices(response.services || []);
+        setFilteredServices(response.services || []);
+      } catch (err) {
+        console.error('Error fetching services:', err);
+        setError(handleApiError(err));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
   }, []);
 
   const handleSearch = (searchData) => {
@@ -52,7 +68,20 @@ const Services = () => {
         </div>
 
         {/* Services Grid */}
-        {filteredServices.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <Loader size="large" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <EmptyState
+              title="Error Loading Services"
+              description={error}
+              actionText="Try Again"
+              onAction={() => window.location.reload()}
+            />
+          </div>
+        ) : filteredServices.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredServices.map((service) => (
               <ServiceCard key={service.id} service={service} />
@@ -60,7 +89,12 @@ const Services = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No services found matching your search.</p>
+            <EmptyState
+              title="No Services Found"
+              description="No services found matching your search criteria."
+              actionText="Clear Search"
+              onAction={() => setFilteredServices(services)}
+            />
           </div>
         )}
 

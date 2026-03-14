@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import CustomerLayout from '../layouts/CustomerLayout';
 import ProviderLayout from '../layouts/ProviderLayout';
+import ProtectedRoute from '../components/ProtectedRoute';
 import Home from '../pages/Home';
 import Services from '../pages/Services';
 import ServiceProviders from '../pages/ServiceProviders';
@@ -55,16 +56,48 @@ const AppRoutes = () => {
       <Route path="/review/:bookingId" element={<MainLayout><Review /></MainLayout>} />
 
       {/* Customer Dashboard Routes */}
-      <Route path="/customer/dashboard" element={<CustomerLayout><CustomerDashboard /></CustomerLayout>} />
-      <Route path="/customer/requests" element={<CustomerLayout><CustomerRequests /></CustomerLayout>} />
-      <Route path="/customer/profile" element={<CustomerLayout><CustomerProfile /></CustomerLayout>} />
+      <Route path="/customer/dashboard" element={
+        <ProtectedRoute requiredRole="CUSTOMER">
+          <CustomerLayout><CustomerDashboard /></CustomerLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/customer/requests" element={
+        <ProtectedRoute requiredRole="CUSTOMER">
+          <CustomerLayout><CustomerRequests /></CustomerLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/customer/profile" element={
+        <ProtectedRoute requiredRole="CUSTOMER">
+          <CustomerLayout><CustomerProfile /></CustomerLayout>
+        </ProtectedRoute>
+      } />
 
       {/* Provider Dashboard Routes */}
-      <Route path="/provider/dashboard" element={<ProviderLayout><ProviderDashboard /></ProviderLayout>} />
-      <Route path="/provider/services" element={<ProviderLayout><ProviderServices /></ProviderLayout>} />
-      <Route path="/provider/requests" element={<ProviderLayout><ProviderRequests /></ProviderLayout>} />
-      <Route path="/provider/profile" element={<ProviderLayout><CustomerProfile /></ProviderLayout>} />
-      <Route path="/provider/verification" element={<ProviderLayout><CustomerProfile /></ProviderLayout>} />
+      <Route path="/provider/dashboard" element={
+        <ProtectedRoute requiredRole="PROVIDER">
+          <ProviderLayout><ProviderDashboard /></ProviderLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/provider/services" element={
+        <ProtectedRoute requiredRole="PROVIDER">
+          <ProviderLayout><ProviderServices /></ProviderLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/provider/requests" element={
+        <ProtectedRoute requiredRole="PROVIDER">
+          <ProviderLayout><ProviderRequests /></ProviderLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/provider/profile" element={
+        <ProtectedRoute requiredRole="PROVIDER">
+          <ProviderLayout><CustomerProfile /></ProviderLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/provider/verification" element={
+        <ProtectedRoute requiredRole="PROVIDER">
+          <ProviderLayout><CustomerProfile /></ProviderLayout>
+        </ProtectedRoute>
+      } />
 
       {/* 404 Page */}
       <Route path="*" element={<NotFound />} />

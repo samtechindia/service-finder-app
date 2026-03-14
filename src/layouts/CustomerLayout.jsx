@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Avatar from '../components/ui/Avatar';
 import Badge from '../components/ui/Badge';
@@ -9,6 +10,7 @@ const CustomerLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const menuItems = [
     {
@@ -63,8 +65,7 @@ const CustomerLayout = ({ children }) => {
   };
 
   const handleLogout = () => {
-    // Handle logout logic
-    navigate('/login');
+    logout();
   };
 
   return (
@@ -163,11 +164,11 @@ const CustomerLayout = ({ children }) => {
             <div className="border-t border-gray-200 p-6">
               <div className="flex items-center">
                 <Avatar size="sm" className="bg-primary-100 text-primary-600">
-                  JD
+                  {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
                 </Avatar>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">John Doe</p>
-                  <p className="text-xs text-gray-500">john.doe@example.com</p>
+                  <p className="text-sm font-medium text-gray-900">{user?.name || 'Customer'}</p>
+                  <p className="text-xs text-gray-500">{user?.email || 'customer@example.com'}</p>
                 </div>
               </div>
               <Button
@@ -213,7 +214,7 @@ const CustomerLayout = ({ children }) => {
               {/* Mobile user menu */}
               <div className="lg:hidden">
                 <Avatar size="sm" className="bg-primary-100 text-primary-600">
-                  JD
+                  {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
                 </Avatar>
               </div>
             </div>

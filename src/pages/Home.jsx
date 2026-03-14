@@ -5,8 +5,7 @@ import HeroSlider from '../components/HeroSlider';
 import AdvancedSearch from '../components/AdvancedSearch';
 import ServiceCard from '../components/ServiceCard';
 import ProviderCard from '../components/ProviderCard';
-import servicesData from '../mock/services.json';
-import providersData from '../mock/providers.json';
+import { servicesAPI, providersAPI, handleApiError } from '../services/api';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,11 +17,24 @@ const Home = () => {
   const searchResultsRef = useRef(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      setServices(servicesData);
-      setProviders(providersData);
-      setLoading(false);
-    }, 1000);
+    const fetchData = async () => {
+      try {
+        const [servicesResponse, providersResponse] = await Promise.all([
+          servicesAPI.getServices({ limit: 6 }),
+          providersAPI.getProviders({ limit: 6 })
+        ]);
+        
+        setServices(servicesResponse.services || []);
+        setProviders(providersResponse.providers || []);
+      } catch (error) {
+        console.error('Error fetching home data:', error);
+        // Show error message to user
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const heroSlides = [];

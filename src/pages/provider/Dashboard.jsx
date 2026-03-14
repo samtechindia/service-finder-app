@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { providersAPI } from '../../services/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
@@ -8,8 +10,10 @@ import Avatar from '../../components/ui/Avatar';
 import RatingStars from '../../components/ui/RatingStars';
 import SkeletonLoader from '../../components/ui/SkeletonLoader';
 import Alert from '../../components/ui/Alert';
+import { toast } from 'react-toastify';
 
 const ProviderDashboard = () => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalEarnings: 0,
@@ -23,90 +27,119 @@ const ProviderDashboard = () => {
   const [weeklyEarnings, setWeeklyEarnings] = useState([]);
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setStats({
-        totalEarnings: 12450,
-        activeJobs: 3,
-        completedJobs: 47,
-        averageRating: 4.8,
-        totalClients: 32
-      });
-      
-      setRecentRequests([
-        {
-          id: 1,
-          service: 'Plumbing',
-          customer: 'Alice Johnson',
-          date: '2024-03-15',
-          time: '2:00 PM',
-          price: 150,
-          urgency: 'medium',
-          status: 'pending',
-          description: 'Fix leaking kitchen faucet'
-        },
-        {
-          id: 2,
-          service: 'Plumbing',
-          customer: 'Bob Williams',
-          date: '2024-03-15',
-          time: '4:00 PM',
-          price: 200,
-          urgency: 'high',
-          status: 'pending',
-          description: 'Emergency pipe repair'
-        },
-        {
-          id: 3,
-          service: 'Plumbing',
-          customer: 'Carol Davis',
-          date: '2024-03-14',
-          time: '10:00 AM',
-          price: 120,
-          urgency: 'low',
-          status: 'pending',
-          description: 'Install new bathroom fixtures'
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch current provider data with stats
+        const response = await providersAPI.getCurrentProvider();
+        
+        // Set stats from API response
+        setStats(response.stats);
+        
+        // Set recent requests
+        setRecentRequests(response.recentRequests.map(booking => ({
+          id: booking.id,
+          service: booking.service?.name || 'Service',
+          customer: booking.customer?.user?.name || 'Customer',
+          date: new Date(booking.scheduledAt).toLocaleDateString(),
+          time: new Date(booking.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          price: booking.price || 0,
+          urgency: booking.urgency || 'medium',
+          status: booking.status.toLowerCase(),
+          description: booking.description || 'Service request',
+          customerId: booking.customerId
+        })));
+
+        // Set upcoming jobs
+        setUpcomingJobs(response.upcomingJobs.map(booking => ({
+          id: booking.id,
+          service: booking.service?.name || 'Service',
+          customer: booking.customer?.user?.name || 'Customer',
+          date: new Date(booking.scheduledAt).toLocaleDateString(),
+          time: new Date(booking.scheduledAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          price: booking.price || 0,
+          status: booking.status.toLowerCase(),
+          address: booking.address || 'Address',
+          description: booking.description || 'Service description'
+        })));
+
+        // Generate weekly earnings data (mock for now, can be calculated from real data)
+        const weeklyData = [];
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const today = new Date();
+        
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date(today);
+          date.setDate(date.getDate() - i);
+          const dayName = days[date.getDay() === 0 ? 6 : date.getDay() - 1];
+          
+          // Calculate earnings for this day (mock data for now)
+          const dayEarnings = Math.floor(Math.random() * 400) + 100;
+          weeklyData.push({ day: dayName, earnings: dayEarnings });
         }
-      ]);
-      
-      setUpcomingJobs([
-        {
-          id: 4,
-          service: 'Plumbing',
-          customer: 'David Brown',
-          date: '2024-03-16',
-          time: '9:00 AM',
-          price: 180,
-          status: 'confirmed',
-          address: '123 Main St, New York, NY',
-          description: 'Water heater installation'
-        },
-        {
-          id: 5,
-          service: 'Plumbing',
-          customer: 'Emma Wilson',
-          date: '2024-03-17',
-          time: '11:00 AM',
-          price: 160,
-          status: 'confirmed',
-          address: '456 Oak Ave, Brooklyn, NY',
-          description: 'Drain cleaning service'
-        }
-      ]);
-      
-      setWeeklyEarnings([
-        { day: 'Mon', earnings: 320 },
-        { day: 'Tue', earnings: 280 },
-        { day: 'Wed', earnings: 450 },
-        { day: 'Thu', earnings: 380 },
-        { day: 'Fri', earnings: 520 },
-        { day: 'Sat', earnings: 240 },
-        { day: 'Sun', earnings: 180 }
-      ]);
-      
-      setLoading(false);
-    }, 1000);
-  }, []);
+        
+        setWeeklyEarnings(weeklyData);
+        
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        toast.error('Failed to load dashboard data');
+        
+        // Fallback to mock data if API fails
+        setStats({
+          totalEarnings: 12450,
+          activeJobs: 3,
+          completedJobs: 47,
+          averageRating: 4.8,
+          totalClients: 32
+        });
+        
+        setRecentRequests([
+          {
+            id: 1,
+            service: 'Plumbing',
+            customer: 'Alice Johnson',
+            date: '2024-03-15',
+            time: '2:00 PM',
+            price: 150,
+            urgency: 'medium',
+            status: 'pending',
+            description: 'Fix leaking kitchen faucet'
+          }
+        ]);
+        
+        setUpcomingJobs([
+          {
+            id: 4,
+            service: 'Plumbing',
+            customer: 'David Brown',
+            date: '2024-03-16',
+            time: '9:00 AM',
+            price: 180,
+            status: 'confirmed',
+            address: '123 Main St, New York, NY',
+            description: 'Water heater installation'
+          }
+        ]);
+        
+        setWeeklyEarnings([
+          { day: 'Mon', earnings: 320 },
+          { day: 'Tue', earnings: 280 },
+          { day: 'Wed', earnings: 450 },
+          { day: 'Thu', earnings: 380 },
+          { day: 'Fri', earnings: 520 },
+          { day: 'Sat', earnings: 240 },
+          { day: 'Sun', earnings: 180 }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchDashboardData();
+    }
+  }, [user]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -136,6 +169,30 @@ const ProviderDashboard = () => {
     }
   };
 
+  const handleAcceptRequest = async (requestId) => {
+    try {
+      await bookingsAPI.updateBooking(requestId, { status: 'CONFIRMED' });
+      toast.success('Request accepted successfully');
+      // Refresh dashboard data
+      window.location.reload();
+    } catch (error) {
+      console.error('Error accepting request:', error);
+      toast.error('Failed to accept request');
+    }
+  };
+
+  const handleDeclineRequest = async (requestId) => {
+    try {
+      await bookingsAPI.updateBooking(requestId, { status: 'CANCELLED' });
+      toast.success('Request declined');
+      // Refresh dashboard data
+      window.location.reload();
+    } catch (error) {
+      console.error('Error declining request:', error);
+      toast.error('Failed to decline request');
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-6">
@@ -161,7 +218,7 @@ const ProviderDashboard = () => {
     <div className="p-6">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Welcome back, John!</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name || 'Provider'}!</h1>
         <p className="text-gray-600 mt-2">Here's your business overview and recent activity</p>
       </div>
 
@@ -328,8 +385,8 @@ const ProviderDashboard = () => {
                       </Badge>
                       <p className="text-sm font-medium text-gray-900 mt-1">${request.price}</p>
                       <div className="mt-2 space-x-2">
-                        <Button size="sm" variant="outline">Accept</Button>
-                        <Button size="sm" variant="ghost">Decline</Button>
+                        <Button size="sm" variant="outline" onClick={() => handleAcceptRequest(request.id)}>Accept</Button>
+                        <Button size="sm" variant="ghost" onClick={() => handleDeclineRequest(request.id)}>Decline</Button>
                       </div>
                     </div>
                   </div>

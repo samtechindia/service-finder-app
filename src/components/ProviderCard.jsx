@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, Avatar, RatingStars, Badge } from "./ui";
 
 const ProviderCard = ({ provider }) => {
+  console.log(provider);
   return (
     <Card
       hover
@@ -20,11 +21,11 @@ const ProviderCard = ({ provider }) => {
           <div className="relative">
             <Avatar
               src={provider.avatar}
-              alt={provider.name}
+              alt={provider.user?.name}
               size="lg"
               className="ring-2 ring-gray-100 transition-all duration-300 group-hover:ring-primary-400 group-hover:scale-110"
             >
-              {provider.name?.charAt(0)}
+              {provider.user?.name?.charAt(0)}
             </Avatar>
 
             {/* Online indicator */}
@@ -34,11 +35,11 @@ const ProviderCard = ({ provider }) => {
           <div className="flex-1 min-w-0">
 
             <h3 className="text-lg font-semibold text-primary-900 truncate transition group-hover:text-primary-700">
-              {provider.name}
+              {provider.user?.name}
             </h3>
 
             <p className="text-sm text-muted truncate">
-              {provider.service}
+              {provider.services?.[0]?.service?.name || 'Service Provider'}
             </p>
 
             {/* Rating */}
@@ -46,7 +47,7 @@ const ProviderCard = ({ provider }) => {
               <RatingStars rating={provider.rating || 4.5} size="sm" />
 
               <span className="text-xs text-muted">
-                ({provider.reviews || 0})
+                ({provider.reviewCount || 0})
               </span>
             </div>
 
@@ -106,7 +107,14 @@ const ProviderCard = ({ provider }) => {
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
 
           {/* Price */}
-          
+          <div className="text-right">
+            {provider.services?.[0]?.price && (
+              <div className="text-lg font-semibold text-primary-600">
+                ${provider.services[0].price}
+                <span className="text-xs text-muted font-normal">/hr</span>
+              </div>
+            )}
+          </div>
 
           {/* Book Button */}
           <Link

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/ui/Button';
 import Avatar from '../components/ui/Avatar';
 import Badge from '../components/ui/Badge';
@@ -9,6 +10,7 @@ const ProviderLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const menuItems = [
     {
@@ -72,8 +74,7 @@ const ProviderLayout = ({ children }) => {
   };
 
   const handleLogout = () => {
-    // Handle logout logic
-    navigate('/login');
+    logout();
   };
 
   return (
@@ -172,11 +173,11 @@ const ProviderLayout = ({ children }) => {
             <div className="border-t border-gray-200 p-6">
               <div className="flex items-center">
                 <Avatar size="sm" className="bg-accent-100 text-accent-600">
-                  JS
+                  {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
                 </Avatar>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">John Smith</p>
-                  <p className="text-xs text-gray-500">john.smith@example.com</p>
+                  <p className="text-sm font-medium text-gray-900">{user?.name || 'Provider'}</p>
+                  <p className="text-xs text-gray-500">{user?.email || 'provider@example.com'}</p>
                   <Badge variant="success" size="sm" className="mt-1">Verified</Badge>
                 </div>
               </div>
@@ -222,18 +223,18 @@ const ProviderLayout = ({ children }) => {
               
               <div className="hidden lg:flex items-center space-x-3">
                 <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">John Smith</p>
-                  <p className="text-xs text-gray-500">Professional Plumber</p>
+                  <p className="text-sm font-medium text-gray-900">{user?.name || 'Provider'}</p>
+                  <p className="text-xs text-gray-500">{user?.providerProfile?.service || 'Service Provider'}</p>
                 </div>
                 <Avatar size="sm" className="bg-accent-100 text-accent-600">
-                  JS
+                  {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
                 </Avatar>
               </div>
 
               {/* Mobile user menu */}
               <div className="lg:hidden">
                 <Avatar size="sm" className="bg-accent-100 text-accent-600">
-                  JS
+                  {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
                 </Avatar>
               </div>
             </div>

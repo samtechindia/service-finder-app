@@ -234,7 +234,7 @@ const Booking = () => {
                     <div className="flex items-center gap-2 mt-1">
                       <RatingStars rating={provider.rating}/>
                       <span className="text-sm text-gray-500">
-                        ({provider.reviews})
+                        ({provider.reviewCount})
                       </span>
                     </div>
 
